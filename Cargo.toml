@@ -1,5 +1,5 @@
 [package]
-name = "fusao_rf_visao"
+name = "multisensor-uav-tracking"
 version = "0.1.0"
 edition = "2024"
 
