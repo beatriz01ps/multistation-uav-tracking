@@ -1,0 +1,37 @@
+# Cenario de STRESS/THROUGHPUT de rede, nao um cenario experimental
+# principal (a bateria de comparacao UKF/EKF usa os outros cenarios desta
+# pasta, hoje na faixa de 20-60 Hz por estacao). Este cenario usa 878 Hz -
+# a taxa de deteccao BRUTA do sensor de RF, nao a taxa esperada de saida
+# fundida da estacao (essa e limitada pela camera, ~30-60 fps, ja que RF
+# sozinho nao confirma nada novo visualmente entre os frames - ver
+# demais cenarios, que usam a taxa de saida fundida). Serve como teste de
+# limite superior/patologico: o que aconteceria se uma estacao mandasse
+# cada deteccao de RF individualmente, sem fundir com a camera antes de
+# enviar. Testa se `association.synchronization_window_ms` (100ms
+# default) causa fragmentacao de cluster numa frequencia bem acima do
+# esperado na operacao real. Deliberadamente simples (2 estacoes, 1 UAV
+# reto) pra isolar o EFEITO DA FREQUENCIA, sem misturar com
+# manobra/oclusao/multi-alvo - essas outras dimensoes ja tem cenarios
+# proprios. Duracao curta (3s) de proposito: a 878 Hz por estacao isso ja
+# e ~2600 mensagens por estacao, o suficiente pra observar varias janelas
+# de sincronizacao sem deixar o experimento demorar demais.
+
+simulation:
+  duration: 3.0
+  seed: 55
+
+uavs:
+  - name: uav_probe
+    initial_state: [0.0, 0.0, 100.0, 12.0, 4.0, 0.0]
+
+stations:
+  - id: A
+    position: [-50.0, 40.0]
+    frequency_hz: 878
+    position_std: 2.0
+    velocity_std: 0.5
+  - id: B
+    position: [50.0, -40.0]
+    frequency_hz: 878
+    position_std: 2.0
+    velocity_std: 0.5

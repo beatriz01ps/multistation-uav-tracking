@@ -1,0 +1,45 @@
+# 3 UAVs sobre 3 estacoes: uav_curve faz uma curva em S de verdade
+# (turn_schedule: gira para um lado, depois para o outro - Coordinated
+# Turn, nao Constant Velocity), enquanto uav_straight_1 e uav_straight_2
+# seguem retas independentes. Verificado numericamente: uav_straight_2
+# passa MUITO perto da curva por volta de t=9s (distancia minima ~1m -
+# quase um cruzamento de verdade), uav_straight_1 fica mais distante o
+# tempo todo (>25m). Testa reassociacao/discriminacao de identidade
+# quando um alvo manobra e outro passa perto durante a manobra.
+# Esperado apos estabilizar: 3 GlobalTracks consistentes, incluindo o que
+# fez a curva continuando a extrapolar a manobra (nao virar reta) durante
+# qualquer lacuna breve de observacao.
+
+simulation:
+  duration: 10.0
+  seed: 42
+
+uavs:
+  - name: uav_curve
+    initial_state: [-60.0, 20.0, 100.0, 12.0, 0.0, 0.0]
+    turn_schedule:
+      - duration_s: 3.0
+        omega: 0.3
+      - duration_s: 3.0
+        omega: -0.3
+  - name: uav_straight_1
+    initial_state: [70.0, 25.0, 100.0, -14.0, 0.0, 0.0]
+  - name: uav_straight_2
+    initial_state: [-70.0, -30.0, 100.0, 12.0, 9.0, 0.0]
+
+stations:
+  - id: A
+    position: [-70.0, -80.0]
+    frequency_hz: 60
+    position_std: 2.0
+    velocity_std: 0.5
+  - id: B
+    position: [0.0, -80.0]
+    frequency_hz: 35
+    position_std: 2.0
+    velocity_std: 0.5
+  - id: C
+    position: [70.0, -80.0]
+    frequency_hz: 20
+    position_std: 2.0
+    velocity_std: 0.5

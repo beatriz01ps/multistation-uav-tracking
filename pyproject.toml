@@ -1,0 +1,9 @@
+[project]
+name = "uav-multistation-tracker"
+version = "0.1.0"
+description = "Camada central de rastreamento multiestacao de UAVs (V1)"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

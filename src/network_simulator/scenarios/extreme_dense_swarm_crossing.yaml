@@ -1,0 +1,60 @@
+# Cenario extremo de densidade/associacao: 5 UAVs (mais que qualquer outro
+# cenario existente, que vao ate 3), varios cruzando perto do centro (0,0)
+# quase ao mesmo tempo, dois deles manobrando (CT real), um obstaculo bem no
+# meio do aglomerado de cruzamento. Testa o limite da associacao (gate
+# estatistico com muitos candidatos proximos simultaneos), do
+# DuplicateTrackMerger (varios tracks nascendo perto uns dos outros) e da
+# fusao sob oclusao parcial - tudo ao mesmo tempo, nao isolado como nos
+# cenarios de geometria/oclusao/crossing individuais.
+
+simulation:
+  duration: 10.0
+  seed: 123
+
+uavs:
+  - name: uav_n_to_s
+    initial_state: [0.0, 70.0, 100.0, 0.0, -14.0, 0.0]
+  - name: uav_s_to_n
+    initial_state: [5.0, -70.0, 100.0, -1.0, 14.0, 0.0]
+  - name: uav_w_to_e
+    initial_state: [-70.0, -5.0, 100.0, 14.0, 1.0, 0.0]
+  - name: uav_e_to_w_turning
+    initial_state: [70.0, 5.0, 100.0, -13.0, 0.0, 0.0]
+    turn_schedule:
+      - duration_s: 2.5
+        omega: 0.0
+      - duration_s: 5.0
+        omega: 0.45
+  - name: uav_diag_turning
+    initial_state: [-55.0, -55.0, 100.0, 11.0, 11.0, 0.0]
+    turn_schedule:
+      - duration_s: 3.0
+        omega: 0.0
+      - duration_s: 5.0
+        omega: -0.4
+
+stations:
+  - id: N
+    position: [0.0, 90.0]
+    frequency_hz: 50
+    position_std: 2.0
+    velocity_std: 0.6
+  - id: SW
+    position: [-90.0, -90.0]
+    frequency_hz: 50
+    position_std: 2.0
+    velocity_std: 0.6
+  - id: SE
+    position: [90.0, -90.0]
+    frequency_hz: 35
+    position_std: 2.5
+    velocity_std: 0.7
+  - id: NW
+    position: [-90.0, 90.0]
+    frequency_hz: 35
+    position_std: 2.5
+    velocity_std: 0.7
+
+obstacles:
+  - center: [0.0, 0.0]
+    radius: 10.0

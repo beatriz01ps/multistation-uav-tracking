@@ -1,0 +1,46 @@
+# Cenario extremo de qualidade de sensor, nao de manobra: ruido de posicao
+# MUITO maior que o normal (10.0 vs os 1.5-2.0 tipicos dos outros cenarios -
+# ~5x), frequencias baixas para o padrao do cenario (20-25 Hz) e DUAS
+# estacoes com janelas de dropout que
+# SE SOBREPOEM parcialmente sobre o mesmo UAV, deixando so uma estacao
+# sustentando o track por alguns segundos com dados ruidosos. Testa se o
+# filtro (qualquer um dos 4) consegue manter o track vivo (nao deletar por
+# LOST/timeout) e nao divergir com fusao pobre + poucos dados. Dois UAVs, um
+# reto (controle) e outro com uma curva sustentada por cima do ruido pesado
+# (testa CT sob condicao ruim, nao so CV).
+
+simulation:
+  duration: 14.0
+  seed: 99
+
+uavs:
+  - name: uav_straight_noisy
+    initial_state: [-70.0, 20.0, 100.0, 12.0, -3.0, 0.0]
+    dropout_windows:
+      - {station_id: A, start_s: 4.0, end_s: 9.0}
+  - name: uav_turning_noisy
+    initial_state: [-70.0, -40.0, 100.0, 10.0, 8.0, 0.0]
+    turn_schedule:
+      - duration_s: 3.0
+        omega: 0.0
+      - duration_s: 8.0
+        omega: 0.35
+    dropout_windows:
+      - {station_id: B, start_s: 6.0, end_s: 11.0}
+
+stations:
+  - id: A
+    position: [0.0, 90.0]
+    frequency_hz: 20
+    position_std: 10.0
+    velocity_std: 3.0
+  - id: B
+    position: [90.0, -30.0]
+    frequency_hz: 20
+    position_std: 10.0
+    velocity_std: 3.0
+  - id: C
+    position: [-90.0, -60.0]
+    frequency_hz: 25
+    position_std: 8.0
+    velocity_std: 2.5

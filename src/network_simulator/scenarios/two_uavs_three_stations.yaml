@@ -1,0 +1,27 @@
+# Cenario com 2 UAVs, cada um com 3 conjuntos de IDs locais independentes
+# (um por estacao). O tracker nao recebe essa correspondencia verdadeira -
+# esperado apos estabilizar: exatamente dois GlobalTracks consistentes.
+
+simulation:
+  duration: 30.0
+  seed: 42
+
+uavs:
+  - name: uav_1
+    initial_state: [0.0, 0.0, 100.0, 10.0, 3.0, 0.0]
+  - name: uav_2
+    initial_state: [200.0, 200.0, 120.0, -8.0, -2.0, 0.0]
+
+stations:
+  - id: A
+    frequency_hz: 60
+    position_std: 2.0
+    velocity_std: 0.5
+  - id: B
+    frequency_hz: 35
+    position_std: 4.0
+    velocity_std: 0.8
+  - id: C
+    frequency_hz: 20
+    position_std: 6.0
+    velocity_std: 1.0
