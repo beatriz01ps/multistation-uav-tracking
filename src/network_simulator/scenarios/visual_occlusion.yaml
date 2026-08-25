@@ -1,0 +1,32 @@
+# Cenario 3: trajetoria DIAGONAL (nao mais so horizontal) com um obstaculo
+# circular que bloqueia a linha de visada da estacao "far" (canto oposto)
+# durante uma janela do voo (t ~ 3.5s-5.0s, verificado numericamente - ver
+# docs/arquitetura.md), sem nunca tocar a trajetoria em si nem a visada da
+# estacao "close". Esperado: a estacao far para de mandar dado durante essa
+# janela (oclusao GEOMETRICA, nao um dropout de tempo cravado no cenario),
+# o GlobalTrack continua CONFIRMED sustentado pela estacao close, e volta a
+# receber contribuicao de far assim que a linha de visada libera.
+
+simulation:
+  duration: 10.0
+  seed: 42
+
+uavs:
+  - name: uav_1
+    initial_state: [0.0, 0.0, 100.0, 10.0, 10.0, 0.0]
+
+stations:
+  - id: close
+    position: [80.0, 90.0]
+    frequency_hz: 35
+    position_std: 2.0
+    velocity_std: 0.5
+  - id: far
+    position: [95.0, 10.0]
+    frequency_hz: 35
+    position_std: 2.0
+    velocity_std: 0.5
+
+obstacles:
+  - center: [55.0, 35.0]
+    radius: 10.0

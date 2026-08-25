@@ -1,0 +1,33 @@
+# Cenario de dropout + troca de ID local: station B para de observar uav_1
+# entre t=10 e t=15 (coasting esperado nesse intervalo, reassociacao ao
+# retornar), e quando volta usa um ID local NOVO - o tracker precisa
+# reassociar pelo estado/covariancia, nao pela igualdade do local_track_id.
+
+simulation:
+  duration: 30.0
+  seed: 42
+
+uavs:
+  - name: uav_1
+    initial_state: [0.0, 0.0, 100.0, 10.0, 3.0, 0.0]
+    dropout_windows:
+      - station_id: B
+        start_s: 10.0
+        end_s: 15.0
+    id_switch_events:
+      - station_id: B
+        at_s: 15.0
+
+stations:
+  - id: A
+    frequency_hz: 60
+    position_std: 2.0
+    velocity_std: 0.5
+  - id: B
+    frequency_hz: 35
+    position_std: 4.0
+    velocity_std: 0.8
+  - id: C
+    frequency_hz: 20
+    position_std: 6.0
+    velocity_std: 1.0

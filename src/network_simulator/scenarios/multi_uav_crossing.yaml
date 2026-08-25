@@ -1,0 +1,36 @@
+# 3 UAVs sobre 3 estacoes: uav_1 e uav_2 se cruzam exatamente em (0,0) no
+# meio do voo (t=5s, velocidades opostas - o mesmo padrao de
+# tests/integration/test_crossing.py, agora com 3 estacoes em vez de 2);
+# uav_3 segue separado, sem se aproximar do cruzamento (verificado
+# numericamente - distancia minima ao ponto de cruzamento > 65m).
+# Esperado apos estabilizar: 3 GlobalTracks consistentes, sem troca de
+# identidade entre uav_1 e uav_2 no momento do cruzamento.
+
+simulation:
+  duration: 10.0
+  seed: 42
+
+uavs:
+  - name: uav_1
+    initial_state: [-60.0, -30.0, 100.0, 12.0, 6.0, 0.0]
+  - name: uav_2
+    initial_state: [60.0, 30.0, 100.0, -12.0, -6.0, 0.0]
+  - name: uav_3
+    initial_state: [40.0, -70.0, 100.0, -8.0, 0.0, 0.0]
+
+stations:
+  - id: A
+    position: [-70.0, -100.0]
+    frequency_hz: 60
+    position_std: 2.0
+    velocity_std: 0.5
+  - id: B
+    position: [0.0, -100.0]
+    frequency_hz: 35
+    position_std: 2.0
+    velocity_std: 0.5
+  - id: C
+    position: [70.0, -100.0]
+    frequency_hz: 20
+    position_std: 2.0
+    velocity_std: 0.5

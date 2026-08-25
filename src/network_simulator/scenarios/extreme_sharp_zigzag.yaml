@@ -1,0 +1,50 @@
+# Cenario extremo desenhado especificamente para separar UKF de EKF em
+# Coordinated Turn: um UNICO UAV, rapido (22 m/s), fazendo uma sequencia de
+# curvas MUITO fechadas alternando sentido (omega ate 1.2 rad/s, ~69 graus/s)
+# em trechos curtos (1.5s cada) - um zigue-zague agressivo, bem mais extremo
+# que o "gancho" suave de loop_crossing.yaml (omega=0.55 sustentado por 6s).
+# A hipotese e que, quanto mais RAPIDO omega muda e quanto MAIOR sua
+# magnitude, mais a linearizacao de 1a ordem do EKF (Jacobiano calculado no
+# estado atual, congelado durante o passo) se afasta da propagacao exata via
+# sigma points do UKF - aqui e onde a diferenca entre os dois filtros deveria
+# ficar mais visivel, se ela existir na pratica.
+
+simulation:
+  duration: 12.0
+  seed: 7
+
+uavs:
+  - name: uav_zigzag
+    initial_state: [-60.0, -60.0, 100.0, 15.0, 15.0, 0.0]  # ~21.2 m/s
+    turn_schedule:
+      - duration_s: 1.0
+        omega: 0.0
+      - duration_s: 1.5
+        omega: 1.2
+      - duration_s: 1.5
+        omega: -1.2
+      - duration_s: 1.5
+        omega: 1.2
+      - duration_s: 1.5
+        omega: -1.2
+      - duration_s: 1.5
+        omega: 1.2
+      - duration_s: 1.5
+        omega: -1.2
+
+stations:
+  - id: N
+    position: [0.0, 80.0]
+    frequency_hz: 60
+    position_std: 1.5
+    velocity_std: 0.5
+  - id: S
+    position: [0.0, -80.0]
+    frequency_hz: 60
+    position_std: 1.5
+    velocity_std: 0.5
+  - id: E
+    position: [80.0, 0.0]
+    frequency_hz: 35
+    position_std: 1.5
+    velocity_std: 0.5

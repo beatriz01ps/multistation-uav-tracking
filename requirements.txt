@@ -1,0 +1,6 @@
+numpy
+scipy
+filterpy
+pydantic>=2
+pyyaml
+pytest

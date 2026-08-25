@@ -1,0 +1,39 @@
+tracking:
+  state_dimension: 6
+  tentative_confirmation_hits: 3
+  tentative_timeout_seconds: 5.0
+  coasting_timeout_seconds: 10.0
+  lost_timeout_seconds: 20.0
+  deletion_timeout_seconds: 32.0
+
+association:
+  mode: full_state
+  # 0.9983 (n 0.99): correcao tipo Bonferroni pro aumento de frequencia
+  # das estacoes (2-10Hz -> 20-60Hz, fator ~6x, ver frequency_hz nos
+  # cenarios). A taxa de falsa rejeicao do gate (1 - chi_square_probability)
+  # e POR TENTATIVA de associacao - com 6x mais tentativas por segundo, a
+  # taxa de fragmentacao espuria ABSOLUTA multiplicava pelo mesmo fator (a
+  # 0.99, loop_crossing chegava a 25 GlobalTracks criados para 2 UAVs
+  # reais). Validado nos 14 cenarios de src/network_simulator/scenarios/:
+  # numero de tracks confirmados bate exatamente com o numero real de
+  # UAVs em todos, com esta config completa (ver arquitetura!!).
+  chi_square_probability: 0.9983
+  synchronization_window_ms: 100
+  late_message_policy: drop
+  # true = producao (default). false serve so pra ablacao cientifica -
+  # medir fragmentacao/GlobalTracks espurios COM vs SEM a fusao de
+  # duplicados (ver tracking/duplicate_merger.py).
+  duplicate_merge_enabled: true
+
+filter:
+  type: ukf
+  motion_model: coordinated_turn
+  process_noise_acceleration_std: 2.0
+  turn_rate_process_noise_std: 0.05
+  initial_turn_rate_std: 0.3
+
+fusion:
+  strategy: information
+
+time:
+  time_scale: 1.0

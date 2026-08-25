@@ -1,0 +1,29 @@
+# Cenario 2 de geometria: mesma trajetoria reta do cenario "flanking", mas
+# as tres estacoes ficam todas do MESMO lado do caminho, em fila, em vez de
+# flanquear o UAV dos dois lados. Serve de contraste com geometry_flanking.yaml
+# para inspecionar visualmente o efeito do arranjo geometrico das estacoes.
+
+simulation:
+  duration: 10.0
+  seed: 42
+
+uavs:
+  - name: uav_1
+    initial_state: [0.0, 50.0, 100.0, 10.0, 0.0, 0.0]
+
+stations:
+  - id: A
+    position: [15.0, 90.0]
+    frequency_hz: 35
+    position_std: 2.0
+    velocity_std: 0.5
+  - id: B
+    position: [50.0, 90.0]
+    frequency_hz: 35
+    position_std: 2.0
+    velocity_std: 0.5
+  - id: C
+    position: [85.0, 90.0]
+    frequency_hz: 35
+    position_std: 2.0
+    velocity_std: 0.5
